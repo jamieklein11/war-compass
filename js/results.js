@@ -73,71 +73,72 @@ document.addEventListener('DOMContentLoaded', () => {
         maintainAspectRatio: true
     };
     
+    function createCompassSVG({
+        x, y, width, height, userX, userY, xLabels, yLabels, dotColor
+    }) {
+        // Map userX, userY from [-1,1] to SVG coordinates
+        const map = v => ((v + 1) / 2) * width;
+        const userSvgX = map(userX);
+        const userSvgY = height - map(userY); // SVG y is inverted
+        const axisStyle = 'stroke:black;stroke-width:3';
+        const gridStyle = 'stroke:#e5e7eb;stroke-width:1';
+        const arrowSize = 12;
+        // SVG
+        return `
+<svg viewBox="0 0 ${width} ${height}" width="100%" height="100%" style="max-width:350px;max-height:350px;">
+    <!-- Subtle border -->
+    <rect x="0" y="0" width="${width}" height="${height}" fill="#f7f8fa" stroke="#d1d5db" stroke-width="2" rx="18"/>
+    <!-- Grid lines -->
+    <line x1="${width*0.25}" y1="0" x2="${width*0.25}" y2="${height}" style="${gridStyle}"/>
+    <line x1="${width*0.75}" y1="0" x2="${width*0.75}" y2="${height}" style="${gridStyle}"/>
+    <line x1="0" y1="${height*0.25}" x2="${width}" y2="${height*0.25}" style="${gridStyle}"/>
+    <line x1="0" y1="${height*0.75}" x2="${width}" y2="${height*0.75}" style="${gridStyle}"/>
+    <!-- Y axis (vertical, x=width/2) -->
+    <line x1="${width/2}" y1="0" x2="${width/2}" y2="${height}" style="${axisStyle}" marker-start="url(#arrowhead-up)" marker-end="url(#arrowhead-down)"/>
+    <!-- X axis (horizontal, y=height/2) -->
+    <line x1="0" y1="${height/2}" x2="${width}" y2="${height/2}" style="${axisStyle}" marker-start="url(#arrowhead-left)" marker-end="url(#arrowhead-right)"/>
+    <!-- User dot -->
+    <circle cx="${userSvgX}" cy="${userSvgY}" r="13" fill="${dotColor}" stroke="#1e293b" stroke-width="3"/>
+    <!-- Axis labels -->
+    <text x="${width/2}" y="28" text-anchor="middle" font-size="1.1em" font-weight="bold">${yLabels[1]}</text>
+    <text x="${width/2}" y="${height-10}" text-anchor="middle" font-size="1.1em" font-weight="bold">${yLabels[0]}</text>
+    <text x="${width-10}" y="${height/2-12}" text-anchor="end" font-size="1.1em" font-weight="bold">${xLabels[1]}</text>
+    <text x="18" y="${height/2-12}" text-anchor="start" font-size="1.1em" font-weight="bold">${xLabels[0]}</text>
+    <!-- Arrowhead defs -->
+    <defs>
+      <marker id="arrowhead-up" markerWidth="${arrowSize}" markerHeight="${arrowSize}" refX="${arrowSize/2}" refY="${arrowSize/2}" orient="auto" markerUnits="strokeWidth">
+        <polygon points="${arrowSize/2},0 0,${arrowSize} ${arrowSize},${arrowSize}" fill="black"/>
+      </marker>
+      <marker id="arrowhead-down" markerWidth="${arrowSize}" markerHeight="${arrowSize}" refX="${arrowSize/2}" refY="${arrowSize/2}" orient="auto" markerUnits="strokeWidth">
+        <polygon points="0,0 ${arrowSize},0 ${arrowSize/2},${arrowSize}" fill="black"/>
+      </marker>
+      <marker id="arrowhead-left" markerWidth="${arrowSize}" markerHeight="${arrowSize}" refX="${arrowSize/2}" refY="${arrowSize/2}" orient="auto" markerUnits="strokeWidth">
+        <polygon points="0,${arrowSize/2} ${arrowSize},0 ${arrowSize},${arrowSize}" fill="black"/>
+      </marker>
+      <marker id="arrowhead-right" markerWidth="${arrowSize}" markerHeight="${arrowSize}" refX="${arrowSize/2}" refY="${arrowSize/2}" orient="auto" markerUnits="strokeWidth">
+        <polygon points="${arrowSize},${arrowSize/2} 0,0 0,${arrowSize}" fill="black"/>
+      </marker>
+    </defs>
+</svg>`;
+    }
+    
     // Compass A: Strategic Orientation vs. Moral Scope
-    const compassA = new Chart(document.getElementById('compassA'), {
-        type: 'scatter',
-        data: {
-            datasets: [{
-                data: [{
-                    x: convertedResults.strategicOrientation,
-                    y: convertedResults.moralScope
-                }],
-                backgroundColor: 'rgba(37, 99, 235, 0.8)',
-                pointRadius: 8,
-                pointHoverRadius: 10
-            }]
-        },
-        options: {
-            ...commonOptions,
-            plugins: {
-                ...commonOptions.plugins,
-                tooltip: {
-                    callbacks: {
-                        label: function(context) {
-                            const x = context.raw.x;
-                            const y = context.raw.y;
-                            return [
-                                `Strategic Orientation: ${x.toFixed(2)} ${x > 0 ? 'Realist' : 'Idealist'}`,
-                                `Moral Scope: ${y.toFixed(2)} ${y > 0 ? 'Universalist' : 'Particularist'}`
-                            ];
-                        }
-                    }
-                }
-            }
-        }
+    document.getElementById('compassA').innerHTML = createCompassSVG({
+        x: -1, y: -1, width: 320, height: 320,
+        userX: convertedResults.strategicOrientation,
+        userY: convertedResults.moralScope,
+        xLabels: ['Idealist', 'Realist'],
+        yLabels: ['Particularist', 'Universalist'],
+        dotColor: '#2563eb'
     });
     
     // Compass B: Strategic Ethics vs. Epistemic Trust
-    const compassB = new Chart(document.getElementById('compassB'), {
-        type: 'scatter',
-        data: {
-            datasets: [{
-                data: [{
-                    x: convertedResults.strategicEthics,
-                    y: convertedResults.epistemicTrust
-                }],
-                backgroundColor: 'rgba(37, 99, 235, 0.8)',
-                pointRadius: 8,
-                pointHoverRadius: 10
-            }]
-        },
-        options: {
-            ...commonOptions,
-            plugins: {
-                ...commonOptions.plugins,
-                tooltip: {
-                    callbacks: {
-                        label: function(context) {
-                            const x = context.raw.x;
-                            const y = context.raw.y;
-                            return [
-                                `Strategic Ethics: ${x.toFixed(2)} ${x > 0 ? 'Consequentialist' : 'Deontological'}`,
-                                `Epistemic Trust: ${y.toFixed(2)} ${y > 0 ? 'Deferent' : 'Skeptic'}`
-                            ];
-                        }
-                    }
-                }
-            }
-        }
+    document.getElementById('compassB').innerHTML = createCompassSVG({
+        x: -1, y: -1, width: 320, height: 320,
+        userX: convertedResults.strategicEthics,
+        userY: convertedResults.epistemicTrust,
+        xLabels: ['Deontological', 'Consequentialist'],
+        yLabels: ['Populist Skepticism', 'Institutional Deference'],
+        dotColor: '#2563eb'
     });
 }); 
