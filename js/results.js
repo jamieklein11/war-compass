@@ -84,7 +84,12 @@ document.addEventListener('DOMContentLoaded', () => {
         const userSvgY = height - map(userY); // SVG y is inverted
         const axisStyle = 'stroke:black;stroke-width:3';
         const gridStyle = 'stroke:#e5e7eb;stroke-width:1';
-        const arrowSize = 7; // smaller arrowheads
+        const arrowSize = 7;
+        // Axis ends (for arrowheads and labels)
+        const margin = 18;
+        const x0 = margin, x1 = width - margin;
+        const y0 = margin, y1 = height - margin;
+        const cx = width / 2, cy = height / 2;
         // SVG
         return `
 <svg viewBox="0 0 ${width} ${height}" width="100%" height="100%" style="max-width:350px;max-height:350px;">
@@ -95,17 +100,17 @@ document.addEventListener('DOMContentLoaded', () => {
     <line x1="${width*0.75}" y1="0" x2="${width*0.75}" y2="${height}" style="${gridStyle}"/>
     <line x1="0" y1="${height*0.25}" x2="${width}" y2="${height*0.25}" style="${gridStyle}"/>
     <line x1="0" y1="${height*0.75}" x2="${width}" y2="${height*0.75}" style="${gridStyle}"/>
-    <!-- Y axis (vertical, x=width/2) -->
-    <line x1="${width/2}" y1="0" x2="${width/2}" y2="${height}" style="${axisStyle}" marker-start="url(#arrowhead-up)" marker-end="url(#arrowhead-down)"/>
-    <!-- X axis (horizontal, y=height/2) -->
-    <line x1="0" y1="${height/2}" x2="${width}" y2="${height/2}" style="${axisStyle}" marker-start="url(#arrowhead-left)" marker-end="url(#arrowhead-right)"/>
+    <!-- Y axis (vertical, x=cx) -->
+    <line x1="${cx}" y1="${y1}" x2="${cx}" y2="${y0}" style="${axisStyle}" marker-start="url(#arrowhead-down)" marker-end="url(#arrowhead-up)"/>
+    <!-- X axis (horizontal, y=cy) -->
+    <line x1="${x0}" y1="${cy}" x2="${x1}" y2="${cy}" style="${axisStyle}" marker-start="url(#arrowhead-left)" marker-end="url(#arrowhead-right)"/>
     <!-- User dot -->
     <circle cx="${userSvgX}" cy="${userSvgY}" r="13" fill="${dotColor}" stroke="#1e293b" stroke-width="3"/>
-    <!-- Axis labels OUTSIDE the border -->
-    <text x="${width/2}" y="-8" text-anchor="middle" font-size="1.1em" font-weight="bold">${yLabels[1]}</text>
-    <text x="${width/2}" y="${height+24}" text-anchor="middle" font-size="1.1em" font-weight="bold">${yLabels[0]}</text>
-    <text x="${width+8}" y="${height/2-12}" text-anchor="start" font-size="1.1em" font-weight="bold">${xLabels[1]}</text>
-    <text x="-8" y="${height/2-12}" text-anchor="end" font-size="1.1em" font-weight="bold">${xLabels[0]}</text>
+    <!-- Axis labels just outside the axis ends -->
+    <text x="${cx}" y="${y0 - 8}" text-anchor="middle" font-size="1.1em" font-weight="bold">${yLabels[1]}</text>
+    <text x="${cx}" y="${y1 + 22}" text-anchor="middle" font-size="1.1em" font-weight="bold">${yLabels[0]}</text>
+    <text x="${x1 + 8}" y="${cy - 10}" text-anchor="start" font-size="1.1em" font-weight="bold">${xLabels[1]}</text>
+    <text x="${x0 - 8}" y="${cy - 10}" text-anchor="end" font-size="1.1em" font-weight="bold">${xLabels[0]}</text>
     <!-- Arrowhead defs -->
     <defs>
       <marker id="arrowhead-up" markerWidth="${arrowSize}" markerHeight="${arrowSize}" refX="${arrowSize/2}" refY="${arrowSize}" orient="auto" markerUnits="strokeWidth">
