@@ -75,42 +75,45 @@ document.addEventListener('DOMContentLoaded', () => {
     };
     
     function createCompassSVG({
-        x, y, width, height, userX, userY, xLabels, yLabels, dotColor
+        x, y, width = 320, height = 320, userX, userY, xLabels, yLabels, dotColor
     }) {
         console.log('createCompassSVG called', {userX, userY, xLabels, yLabels});
-        // Map userX, userY from [-1,1] to SVG coordinates
-        const map = v => ((v + 1) / 2) * width;
-        const userSvgX = map(userX);
-        const userSvgY = height - map(userY); // SVG y is inverted
+        // Add margin for labels
+        const margin = 48;
+        const innerWidth = width - 2 * margin;
+        const innerHeight = height - 2 * margin;
+        // Map userX, userY from [-1,1] to SVG coordinates (inner area)
+        const mapX = v => margin + ((v + 1) / 2) * innerWidth;
+        const mapY = v => height - (margin + ((v + 1) / 2) * innerHeight); // SVG y is inverted
+        const userSvgX = mapX(userX);
+        const userSvgY = mapY(userY);
         const axisStyle = 'stroke:black;stroke-width:3';
         const gridStyle = 'stroke:#e5e7eb;stroke-width:1';
         const arrowSize = 7;
-        // Axis ends (for arrowheads and labels)
-        const margin = 18;
+        const cx = width / 2, cy = height / 2;
         const x0 = margin, x1 = width - margin;
         const y0 = margin, y1 = height - margin;
-        const cx = width / 2, cy = height / 2;
         // SVG
         return `
-<svg viewBox="0 0 ${width} ${height}" width="100%" height="100%" style="max-width:350px;max-height:350px;">
+<svg viewBox="0 0 ${width} ${height}" width="100%" height="100%" style="max-width:370px;max-height:370px;">
     <!-- Subtle border -->
-    <rect x="0" y="0" width="${width}" height="${height}" fill="#f7f8fa" stroke="#d1d5db" stroke-width="2" rx="18"/>
-    <!-- Grid lines -->
-    <line x1="${width*0.25}" y1="0" x2="${width*0.25}" y2="${height}" style="${gridStyle}"/>
-    <line x1="${width*0.75}" y1="0" x2="${width*0.75}" y2="${height}" style="${gridStyle}"/>
-    <line x1="0" y1="${height*0.25}" x2="${width}" y2="${height*0.25}" style="${gridStyle}"/>
-    <line x1="0" y1="${height*0.75}" x2="${width}" y2="${height*0.75}" style="${gridStyle}"/>
+    <rect x="${margin/4}" y="${margin/4}" width="${width-margin/2}" height="${height-margin/2}" fill="#f7f8fa" stroke="#d1d5db" stroke-width="2" rx="18"/>
+    <!-- Grid lines (inner area) -->
+    <line x1="${x0 + innerWidth*0.25}" y1="${y0}" x2="${x0 + innerWidth*0.25}" y2="${y1}" style="${gridStyle}"/>
+    <line x1="${x0 + innerWidth*0.75}" y1="${y0}" x2="${x0 + innerWidth*0.75}" y2="${y1}" style="${gridStyle}"/>
+    <line x1="${x0}" y1="${y0 + innerHeight*0.25}" x2="${x1}" y2="${y0 + innerHeight*0.25}" style="${gridStyle}"/>
+    <line x1="${x0}" y1="${y0 + innerHeight*0.75}" x2="${x1}" y2="${y0 + innerHeight*0.75}" style="${gridStyle}"/>
     <!-- Y axis (vertical, x=cx) -->
     <line x1="${cx}" y1="${y1}" x2="${cx}" y2="${y0}" style="${axisStyle}" marker-start="url(#arrowhead-down)" marker-end="url(#arrowhead-up)"/>
     <!-- X axis (horizontal, y=cy) -->
     <line x1="${x0}" y1="${cy}" x2="${x1}" y2="${cy}" style="${axisStyle}" marker-start="url(#arrowhead-left)" marker-end="url(#arrowhead-right)"/>
     <!-- User dot -->
     <circle cx="${userSvgX}" cy="${userSvgY}" r="13" fill="${dotColor}" stroke="#1e293b" stroke-width="3"/>
-    <!-- Axis labels just outside the axis ends -->
-    <text x="${cx}" y="${y0 - 8}" text-anchor="middle" font-size="1.1em" font-weight="bold">${yLabels[1]}</text>
-    <text x="${cx}" y="${y1 + 22}" text-anchor="middle" font-size="1.1em" font-weight="bold">${yLabels[0]}</text>
-    <text x="${x1 + 8}" y="${cy - 10}" text-anchor="start" font-size="1.1em" font-weight="bold">${xLabels[1]}</text>
-    <text x="${x0 - 8}" y="${cy - 10}" text-anchor="end" font-size="1.1em" font-weight="bold">${xLabels[0]}</text>
+    <!-- Axis labels in margin -->
+    <text x="${cx}" y="${y0 - 16}" text-anchor="middle" font-size="1.1em" font-weight="bold">${yLabels[1]}</text>
+    <text x="${cx}" y="${y1 + 36}" text-anchor="middle" font-size="1.1em" font-weight="bold">${yLabels[0]}</text>
+    <text x="${x1 + 12}" y="${cy - 10}" text-anchor="start" font-size="1.1em" font-weight="bold">${xLabels[1]}</text>
+    <text x="${x0 - 12}" y="${cy - 10}" text-anchor="end" font-size="1.1em" font-weight="bold">${xLabels[0]}</text>
     <!-- Arrowhead defs -->
     <defs>
       <marker id="arrowhead-up" markerWidth="${arrowSize}" markerHeight="${arrowSize}" refX="${arrowSize/2}" refY="${arrowSize}" orient="auto" markerUnits="strokeWidth">
