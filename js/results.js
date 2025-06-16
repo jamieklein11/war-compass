@@ -75,11 +75,11 @@ document.addEventListener('DOMContentLoaded', () => {
     };
     
     function createCompassSVG({
-        x, y, width = 320, height = 320, userX, userY, xLabels, yLabels, dotColor
+        x, y, width = 420, height = 420, userX, userY, xLabels, yLabels, dotColor
     }) {
         console.log('createCompassSVG called', {userX, userY, xLabels, yLabels});
-        // Add margin for labels
-        const margin = 48;
+        // Add larger margin for labels
+        const margin = 80;
         const innerWidth = width - 2 * margin;
         const innerHeight = height - 2 * margin;
         // Map userX, userY from [-1,1] to SVG coordinates (inner area)
@@ -95,7 +95,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const y0 = margin, y1 = height - margin;
         // SVG
         return `
-<svg viewBox="0 0 ${width} ${height}" width="100%" height="100%" style="max-width:370px;max-height:370px;">
+<svg viewBox="0 0 ${width} ${height}" width="100%" height="100%" style="max-width:470px;max-height:470px;">
     <!-- Subtle border -->
     <rect x="${margin/4}" y="${margin/4}" width="${width-margin/2}" height="${height-margin/2}" fill="#f7f8fa" stroke="#d1d5db" stroke-width="2" rx="18"/>
     <!-- Grid lines (inner area) -->
@@ -110,22 +110,22 @@ document.addEventListener('DOMContentLoaded', () => {
     <!-- User dot -->
     <circle cx="${userSvgX}" cy="${userSvgY}" r="13" fill="${dotColor}" stroke="#1e293b" stroke-width="3"/>
     <!-- Axis labels in margin -->
-    <text x="${cx}" y="${y0 - 16}" text-anchor="middle" font-size="1.1em" font-weight="bold">${yLabels[1]}</text>
-    <text x="${cx}" y="${y1 + 36}" text-anchor="middle" font-size="1.1em" font-weight="bold">${yLabels[0]}</text>
-    <text x="${x1 + 12}" y="${cy - 10}" text-anchor="start" font-size="1.1em" font-weight="bold">${xLabels[1]}</text>
-    <text x="${x0 - 12}" y="${cy - 10}" text-anchor="end" font-size="1.1em" font-weight="bold">${xLabels[0]}</text>
+    <text x="${cx}" y="${y0 - 24}" text-anchor="middle" font-size="1em" font-weight="bold">${yLabels[1]}</text>
+    <text x="${cx}" y="${y1 + 44}" text-anchor="middle" font-size="1em" font-weight="bold">${yLabels[0]}</text>
+    <text x="${x1 + 30}" y="${cy}" text-anchor="middle" font-size="1em" font-weight="bold" transform="rotate(90,${x1 + 30},${cy})">${xLabels[1]}</text>
+    <text x="${x0 - 30}" y="${cy}" text-anchor="middle" font-size="1em" font-weight="bold" transform="rotate(-90,${x0 - 30},${cy})">${xLabels[0]}</text>
     <!-- Arrowhead defs -->
     <defs>
-      <marker id="arrowhead-up" markerWidth="${arrowSize}" markerHeight="${arrowSize}" refX="${arrowSize/2}" refY="${arrowSize}" orient="auto" markerUnits="strokeWidth">
+      <marker id="arrowhead-up" markerWidth="${arrowSize}" markerHeight="${arrowSize}" refX="${arrowSize/2}" refY="${arrowSize}" orient="0" markerUnits="strokeWidth">
         <polygon points="${arrowSize/2},0 0,${arrowSize} ${arrowSize},${arrowSize}" fill="black"/>
       </marker>
-      <marker id="arrowhead-down" markerWidth="${arrowSize}" markerHeight="${arrowSize}" refX="${arrowSize/2}" refY="0" orient="auto" markerUnits="strokeWidth">
-        <polygon points="0,0 ${arrowSize},0 ${arrowSize/2},${arrowSize}" fill="black"/>
+      <marker id="arrowhead-down" markerWidth="${arrowSize}" markerHeight="${arrowSize}" refX="${arrowSize/2}" refY="0" orient="180" markerUnits="strokeWidth">
+        <polygon points="${arrowSize/2},${arrowSize} 0,0 ${arrowSize},0" fill="black"/>
       </marker>
-      <marker id="arrowhead-left" markerWidth="${arrowSize}" markerHeight="${arrowSize}" refX="${arrowSize}" refY="${arrowSize/2}" orient="auto" markerUnits="strokeWidth">
+      <marker id="arrowhead-left" markerWidth="${arrowSize}" markerHeight="${arrowSize}" refX="0" refY="${arrowSize/2}" orient="270" markerUnits="strokeWidth">
         <polygon points="0,${arrowSize/2} ${arrowSize},0 ${arrowSize},${arrowSize}" fill="black"/>
       </marker>
-      <marker id="arrowhead-right" markerWidth="${arrowSize}" markerHeight="${arrowSize}" refX="0" refY="${arrowSize/2}" orient="auto" markerUnits="strokeWidth">
+      <marker id="arrowhead-right" markerWidth="${arrowSize}" markerHeight="${arrowSize}" refX="${arrowSize}" refY="${arrowSize/2}" orient="90" markerUnits="strokeWidth">
         <polygon points="${arrowSize},${arrowSize/2} 0,0 0,${arrowSize}" fill="black"/>
       </marker>
     </defs>
@@ -134,7 +134,7 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // Compass A: Strategic Orientation vs. Moral Scope
     document.getElementById('compassA').innerHTML = createCompassSVG({
-        x: -1, y: -1, width: 320, height: 320,
+        x: -1, y: -1, width: 420, height: 420,
         userX: convertedResults.strategicOrientation,
         userY: convertedResults.moralScope,
         xLabels: ['Idealist', 'Realist'],
@@ -144,7 +144,7 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // Compass B: Strategic Ethics vs. Epistemic Trust
     document.getElementById('compassB').innerHTML = createCompassSVG({
-        x: -1, y: -1, width: 320, height: 320,
+        x: -1, y: -1, width: 420, height: 420,
         userX: convertedResults.strategicEthics,
         userY: convertedResults.epistemicTrust,
         xLabels: ['Deontological', 'Consequentialist'],
