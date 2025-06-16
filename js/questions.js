@@ -109,9 +109,9 @@ const questions = [
     },
     {
         id: 19,
-        text: "Civilians in enemy states should be considered morally equivalent to civilians at home.",
-        axis: "moralScope",
-        reverseScored: false
+        text: "When all options are bad, it is better to refuse than to choose the lesser evil.",
+        axis: "strategicEthics",
+        reverseScored: true
     },
     {
         id: 20,
@@ -123,7 +123,7 @@ const questions = [
         id: 21,
         text: "Generally speaking, those in charge of war efforts are more qualified than the public to judge what actions are necessary.",
         axis: "epistemicTrust",
-        reverseScored: true
+        reverseScored: false
     },
     {
         id: 22,
