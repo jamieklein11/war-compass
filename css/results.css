@@ -1,0 +1,104 @@
+.results-container {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: calc(var(--spacing-unit) * 2) 0;
+}
+
+.compass-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: calc(var(--spacing-unit) * 2);
+    margin: calc(var(--spacing-unit) * 3) 0;
+}
+
+.compass-wrapper {
+    background-color: var(--secondary-background);
+    border-radius: 0.5rem;
+    padding: var(--spacing-unit);
+    text-align: center;
+}
+
+.compass-wrapper h2 {
+    font-size: 1.25rem;
+    margin-bottom: var(--spacing-unit);
+}
+
+.scores-container {
+    margin: calc(var(--spacing-unit) * 3) 0;
+}
+
+.scores-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: var(--spacing-unit);
+    margin-top: var(--spacing-unit);
+}
+
+.score-item {
+    background-color: var(--secondary-background);
+    border-radius: 0.5rem;
+    padding: var(--spacing-unit);
+    text-align: center;
+}
+
+.score-item h3 {
+    font-size: 1.125rem;
+    margin-bottom: 0.5rem;
+}
+
+.score-value {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--primary-color);
+    margin: 0.5rem 0;
+}
+
+.score-description {
+    font-size: 0.875rem;
+    color: #6b7280;
+}
+
+.explanations {
+    margin: calc(var(--spacing-unit) * 3) 0;
+}
+
+.explanation-section {
+    background-color: var(--secondary-background);
+    border-radius: 0.5rem;
+    padding: var(--spacing-unit);
+    margin-bottom: var(--spacing-unit);
+}
+
+.explanation-section h3 {
+    color: var(--primary-color);
+    margin-bottom: 0.5rem;
+}
+
+.example {
+    margin-top: var(--spacing-unit);
+    padding-top: var(--spacing-unit);
+    border-top: 1px solid var(--border-color);
+}
+
+.example p {
+    margin-bottom: 0.5rem;
+}
+
+.example p:last-child {
+    margin-bottom: 0;
+}
+
+.actions {
+    text-align: center;
+    margin-top: calc(var(--spacing-unit) * 3);
+}
+
+@media (max-width: 640px) {
+    .compass-container {
+        grid-template-columns: 1fr;
+    }
+    
+    .scores-grid {
+        grid-template-columns: 1fr;
+    }
+} 
