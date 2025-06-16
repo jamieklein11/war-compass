@@ -28,13 +28,16 @@
 }
 
 .scores-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: var(--spacing-unit);
-    margin-top: var(--spacing-unit);
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 1.5rem;
+    justify-content: center;
 }
 
 .score-item {
+    flex: 1 1 0;
+    min-width: 160px;
+    max-width: 220px;
     background-color: var(--secondary-background);
     border-radius: 0.5rem;
     padding: var(--spacing-unit);

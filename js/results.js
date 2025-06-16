@@ -23,11 +23,18 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
     
-    // Update score displays
-    document.getElementById('strategicOrientationScore').textContent = convertedResults.strategicOrientation.toFixed(2);
-    document.getElementById('moralScopeScore').textContent = convertedResults.moralScope.toFixed(2);
-    document.getElementById('strategicEthicsScore').textContent = convertedResults.strategicEthics.toFixed(2);
-    document.getElementById('epistemicTrustScore').textContent = convertedResults.epistemicTrust.toFixed(2);
+    // Update score displays with only the matching label and absolute value
+    function getLabel(axis, value) {
+        if (axis === 'strategicOrientation') return value >= 0 ? 'Realist' : 'Idealist';
+        if (axis === 'moralScope') return value >= 0 ? 'Universalist' : 'Particularist';
+        if (axis === 'strategicEthics') return value >= 0 ? 'Consequentialist' : 'Deontological';
+        if (axis === 'epistemicTrust') return value >= 0 ? 'Institutional Deference' : 'Populist Skepticism';
+        return '';
+    }
+    document.getElementById('strategicOrientationScore').textContent = `${getLabel('strategicOrientation', convertedResults.strategicOrientation)} (${Math.abs(convertedResults.strategicOrientation).toFixed(2)})`;
+    document.getElementById('moralScopeScore').textContent = `${getLabel('moralScope', convertedResults.moralScope)} (${Math.abs(convertedResults.moralScope).toFixed(2)})`;
+    document.getElementById('strategicEthicsScore').textContent = `${getLabel('strategicEthics', convertedResults.strategicEthics)} (${Math.abs(convertedResults.strategicEthics).toFixed(2)})`;
+    document.getElementById('epistemicTrustScore').textContent = `${getLabel('epistemicTrust', convertedResults.epistemicTrust)} (${Math.abs(convertedResults.epistemicTrust).toFixed(2)})`;
     
     // Common chart options
     const commonOptions = {
@@ -104,9 +111,9 @@ document.addEventListener('DOMContentLoaded', () => {
     <line x1="${x0}" y1="${y0 + innerHeight*0.25}" x2="${x1}" y2="${y0 + innerHeight*0.25}" style="${gridStyle}"/>
     <line x1="${x0}" y1="${y0 + innerHeight*0.75}" x2="${x1}" y2="${y0 + innerHeight*0.75}" style="${gridStyle}"/>
     <!-- Y axis (vertical, x=cx) -->
-    <line x1="${cx}" y1="${y1}" x2="${cx}" y2="${y0}" style="${axisStyle}" marker-start="url(#arrowhead)" marker-end="url(#arrowhead)"/>
+    <line x1="${cx}" y1="${y1}" x2="${cx}" y2="${y0}" style="${axisStyle}"/>
     <!-- X axis (horizontal, y=cy) -->
-    <line x1="${x0}" y1="${cy}" x2="${x1}" y2="${cy}" style="${axisStyle}" marker-start="url(#arrowhead)" marker-end="url(#arrowhead)"/>
+    <line x1="${x0}" y1="${cy}" x2="${x1}" y2="${cy}" style="${axisStyle}"/>
     <!-- User dot -->
     <circle cx="${userSvgX}" cy="${userSvgY}" r="13" fill="${dotColor}" stroke="#1e293b" stroke-width="3"/>
     <!-- Axis labels in margin -->
@@ -114,12 +121,6 @@ document.addEventListener('DOMContentLoaded', () => {
     <text x="${cx}" y="${y1 + 44}" text-anchor="middle" font-size="1em" font-weight="bold">${yLabels[0]}</text>
     <text x="${x1 + 30}" y="${cy}" text-anchor="middle" font-size="1em" font-weight="bold" transform="rotate(90,${x1 + 30},${cy})">${xLabels[1]}</text>
     <text x="${x0 - 30}" y="${cy}" text-anchor="middle" font-size="1em" font-weight="bold" transform="rotate(-90,${x0 - 30},${cy})">${xLabels[0]}</text>
-    <!-- Arrowhead def: single up-pointing, orient auto -->
-    <defs>
-      <marker id="arrowhead" markerWidth="10" markerHeight="10" refX="5" refY="10" orient="auto" markerUnits="strokeWidth">
-        <polygon points="5,0 0,10 10,10" fill="black"/>
-      </marker>
-    </defs>
 </svg>`;
     }
     
