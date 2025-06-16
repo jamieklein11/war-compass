@@ -1,3 +1,4 @@
+console.log('results.js loaded');
 document.addEventListener('DOMContentLoaded', () => {
     // Get results from localStorage
     const results = JSON.parse(localStorage.getItem('warCompassResults'));
@@ -76,6 +77,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function createCompassSVG({
         x, y, width, height, userX, userY, xLabels, yLabels, dotColor
     }) {
+        console.log('createCompassSVG called', {userX, userY, xLabels, yLabels});
         // Map userX, userY from [-1,1] to SVG coordinates
         const map = v => ((v + 1) / 2) * width;
         const userSvgX = map(userX);
