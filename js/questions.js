@@ -19,7 +19,7 @@ const questions = [
     },
     {
         id: 4,
-        text: "Ordinary citizens can see through propaganda more clearly than state leaders.",
+        text: "Ordinary citizens are often better at identifying misinformation than political or military leaders.",
         axis: "epistemicTrust",
         reverseScored: true
     },
@@ -109,9 +109,9 @@ const questions = [
     },
     {
         id: 19,
-        text: "Civilians in enemy states are not morally equivalent to civilians at home.",
+        text: "Civilians in enemy states should be considered morally equivalent to civilians at home.",
         axis: "moralScope",
-        reverseScored: true
+        reverseScored: false
     },
     {
         id: 20,
@@ -121,7 +121,7 @@ const questions = [
     },
     {
         id: 21,
-        text: "It's dangerous to assume the people in charge always know what they're doing.",
+        text: "Generally speaking, those in charge of war efforts are more qualified than the public to judge what actions are necessary.",
         axis: "epistemicTrust",
         reverseScored: true
     },

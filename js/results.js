@@ -7,11 +7,20 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
     }
     
+    // Convert scores from 1-5 to 0-1 scale
+    const convertedResults = {};
+    for (const axis in results) {
+        // Convert from 1-5 to 0-1 scale
+        convertedResults[axis] = (results[axis] - 3) / 2;
+        // Ensure the score is between 0 and 1
+        convertedResults[axis] = Math.max(0, Math.min(1, convertedResults[axis]));
+    }
+    
     // Update score displays
-    document.getElementById('strategicEthicsScore').textContent = results.strategicEthics.toFixed(1);
-    document.getElementById('moralScopeScore').textContent = results.moralScope.toFixed(1);
-    document.getElementById('strategicOrientationScore').textContent = results.strategicOrientation.toFixed(1);
-    document.getElementById('epistemicTrustScore').textContent = results.epistemicTrust.toFixed(1);
+    document.getElementById('strategicOrientationScore').textContent = convertedResults.strategicOrientation.toFixed(2);
+    document.getElementById('moralScopeScore').textContent = convertedResults.moralScope.toFixed(2);
+    document.getElementById('strategicEthicsScore').textContent = convertedResults.strategicEthics.toFixed(2);
+    document.getElementById('epistemicTrustScore').textContent = convertedResults.epistemicTrust.toFixed(2);
     
     // Compass A: Strategic Orientation vs. Moral Scope
     const compassA = new Chart(document.getElementById('compassA'), {
@@ -19,8 +28,8 @@ document.addEventListener('DOMContentLoaded', () => {
         data: {
             datasets: [{
                 data: [{
-                    x: results.strategicOrientation,
-                    y: results.moralScope
+                    x: convertedResults.strategicOrientation,
+                    y: convertedResults.moralScope
                 }],
                 backgroundColor: 'rgba(37, 99, 235, 0.8)',
                 pointRadius: 8,
@@ -30,25 +39,43 @@ document.addEventListener('DOMContentLoaded', () => {
         options: {
             scales: {
                 x: {
-                    min: 1,
-                    max: 5,
+                    min: 0,
+                    max: 1,
                     title: {
                         display: true,
-                        text: 'Strategic Orientation (Idealist → Realist)'
+                        text: 'Strategic Orientation'
+                    },
+                    grid: {
+                        color: (context) => context.tick.value === 0.5 ? 'rgba(0, 0, 0, 0.5)' : 'rgba(0, 0, 0, 0.1)'
                     }
                 },
                 y: {
-                    min: 1,
-                    max: 5,
+                    min: 0,
+                    max: 1,
                     title: {
                         display: true,
-                        text: 'Moral Scope (Particularist → Universalist)'
+                        text: 'Moral Scope'
+                    },
+                    grid: {
+                        color: (context) => context.tick.value === 0.5 ? 'rgba(0, 0, 0, 0.5)' : 'rgba(0, 0, 0, 0.1)'
                     }
                 }
             },
             plugins: {
                 legend: {
                     display: false
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            const x = context.raw.x;
+                            const y = context.raw.y;
+                            return [
+                                `Strategic Orientation: ${x.toFixed(2)} ${x > 0.5 ? 'Realist' : 'Idealist'}`,
+                                `Moral Scope: ${y.toFixed(2)} ${y > 0.5 ? 'Universalist' : 'Particularist'}`
+                            ];
+                        }
+                    }
                 }
             },
             responsive: true,
@@ -62,8 +89,8 @@ document.addEventListener('DOMContentLoaded', () => {
         data: {
             datasets: [{
                 data: [{
-                    x: results.strategicEthics,
-                    y: results.epistemicTrust
+                    x: convertedResults.strategicEthics,
+                    y: convertedResults.epistemicTrust
                 }],
                 backgroundColor: 'rgba(37, 99, 235, 0.8)',
                 pointRadius: 8,
@@ -73,25 +100,43 @@ document.addEventListener('DOMContentLoaded', () => {
         options: {
             scales: {
                 x: {
-                    min: 1,
-                    max: 5,
+                    min: 0,
+                    max: 1,
                     title: {
                         display: true,
-                        text: 'Strategic Ethics (Deontological → Consequentialist)'
+                        text: 'Strategic Ethics'
+                    },
+                    grid: {
+                        color: (context) => context.tick.value === 0.5 ? 'rgba(0, 0, 0, 0.5)' : 'rgba(0, 0, 0, 0.1)'
                     }
                 },
                 y: {
-                    min: 1,
-                    max: 5,
+                    min: 0,
+                    max: 1,
                     title: {
                         display: true,
-                        text: 'Epistemic Trust (Skeptic → Deferent)'
+                        text: 'Epistemic Trust'
+                    },
+                    grid: {
+                        color: (context) => context.tick.value === 0.5 ? 'rgba(0, 0, 0, 0.5)' : 'rgba(0, 0, 0, 0.1)'
                     }
                 }
             },
             plugins: {
                 legend: {
                     display: false
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            const x = context.raw.x;
+                            const y = context.raw.y;
+                            return [
+                                `Strategic Ethics: ${x.toFixed(2)} ${x > 0.5 ? 'Consequentialist' : 'Deontological'}`,
+                                `Epistemic Trust: ${y.toFixed(2)} ${y > 0.5 ? 'Deferent' : 'Skeptic'}`
+                            ];
+                        }
+                    }
                 }
             },
             responsive: true,
