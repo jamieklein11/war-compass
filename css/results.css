@@ -50,10 +50,13 @@
 }
 
 .score-value {
-    font-size: 2rem;
+    color: #2563eb;
     font-weight: 700;
-    color: var(--primary-color);
-    margin: 0.5rem 0;
+    font-size: clamp(1.2rem, 4vw, 2.5rem);
+    line-height: 1.1;
+    word-break: break-word;
+    text-align: center;
+    margin: 0.5rem 0 0.5rem 0;
 }
 
 .score-description {
