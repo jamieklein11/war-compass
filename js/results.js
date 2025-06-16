@@ -84,7 +84,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const userSvgY = height - map(userY); // SVG y is inverted
         const axisStyle = 'stroke:black;stroke-width:3';
         const gridStyle = 'stroke:#e5e7eb;stroke-width:1';
-        const arrowSize = 12;
+        const arrowSize = 7; // smaller arrowheads
         // SVG
         return `
 <svg viewBox="0 0 ${width} ${height}" width="100%" height="100%" style="max-width:350px;max-height:350px;">
@@ -101,23 +101,23 @@ document.addEventListener('DOMContentLoaded', () => {
     <line x1="0" y1="${height/2}" x2="${width}" y2="${height/2}" style="${axisStyle}" marker-start="url(#arrowhead-left)" marker-end="url(#arrowhead-right)"/>
     <!-- User dot -->
     <circle cx="${userSvgX}" cy="${userSvgY}" r="13" fill="${dotColor}" stroke="#1e293b" stroke-width="3"/>
-    <!-- Axis labels -->
-    <text x="${width/2}" y="28" text-anchor="middle" font-size="1.1em" font-weight="bold">${yLabels[1]}</text>
-    <text x="${width/2}" y="${height-10}" text-anchor="middle" font-size="1.1em" font-weight="bold">${yLabels[0]}</text>
-    <text x="${width-10}" y="${height/2-12}" text-anchor="end" font-size="1.1em" font-weight="bold">${xLabels[1]}</text>
-    <text x="18" y="${height/2-12}" text-anchor="start" font-size="1.1em" font-weight="bold">${xLabels[0]}</text>
+    <!-- Axis labels OUTSIDE the border -->
+    <text x="${width/2}" y="-8" text-anchor="middle" font-size="1.1em" font-weight="bold">${yLabels[1]}</text>
+    <text x="${width/2}" y="${height+24}" text-anchor="middle" font-size="1.1em" font-weight="bold">${yLabels[0]}</text>
+    <text x="${width+8}" y="${height/2-12}" text-anchor="start" font-size="1.1em" font-weight="bold">${xLabels[1]}</text>
+    <text x="-8" y="${height/2-12}" text-anchor="end" font-size="1.1em" font-weight="bold">${xLabels[0]}</text>
     <!-- Arrowhead defs -->
     <defs>
-      <marker id="arrowhead-up" markerWidth="${arrowSize}" markerHeight="${arrowSize}" refX="${arrowSize/2}" refY="${arrowSize/2}" orient="auto" markerUnits="strokeWidth">
+      <marker id="arrowhead-up" markerWidth="${arrowSize}" markerHeight="${arrowSize}" refX="${arrowSize/2}" refY="${arrowSize}" orient="auto" markerUnits="strokeWidth">
         <polygon points="${arrowSize/2},0 0,${arrowSize} ${arrowSize},${arrowSize}" fill="black"/>
       </marker>
-      <marker id="arrowhead-down" markerWidth="${arrowSize}" markerHeight="${arrowSize}" refX="${arrowSize/2}" refY="${arrowSize/2}" orient="auto" markerUnits="strokeWidth">
+      <marker id="arrowhead-down" markerWidth="${arrowSize}" markerHeight="${arrowSize}" refX="${arrowSize/2}" refY="0" orient="auto" markerUnits="strokeWidth">
         <polygon points="0,0 ${arrowSize},0 ${arrowSize/2},${arrowSize}" fill="black"/>
       </marker>
-      <marker id="arrowhead-left" markerWidth="${arrowSize}" markerHeight="${arrowSize}" refX="${arrowSize/2}" refY="${arrowSize/2}" orient="auto" markerUnits="strokeWidth">
+      <marker id="arrowhead-left" markerWidth="${arrowSize}" markerHeight="${arrowSize}" refX="${arrowSize}" refY="${arrowSize/2}" orient="auto" markerUnits="strokeWidth">
         <polygon points="0,${arrowSize/2} ${arrowSize},0 ${arrowSize},${arrowSize}" fill="black"/>
       </marker>
-      <marker id="arrowhead-right" markerWidth="${arrowSize}" markerHeight="${arrowSize}" refX="${arrowSize/2}" refY="${arrowSize/2}" orient="auto" markerUnits="strokeWidth">
+      <marker id="arrowhead-right" markerWidth="${arrowSize}" markerHeight="${arrowSize}" refX="0" refY="${arrowSize/2}" orient="auto" markerUnits="strokeWidth">
         <polygon points="${arrowSize},${arrowSize/2} 0,0 0,${arrowSize}" fill="black"/>
       </marker>
     </defs>
