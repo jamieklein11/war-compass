@@ -40,13 +40,21 @@
     max-width: 220px;
     background-color: var(--secondary-background);
     border-radius: 0.5rem;
-    padding: var(--spacing-unit);
-    text-align: center;
+    padding: 1.5rem 1rem 1.5rem 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    height: 220px;
+    box-sizing: border-box;
 }
 
 .score-item h3 {
-    font-size: 1.125rem;
-    margin-bottom: 0.5rem;
+    margin-top: 0;
+    margin-bottom: 1rem;
+    font-size: 1.3rem;
+    font-weight: 600;
+    text-align: center;
 }
 
 .score-value {
@@ -57,11 +65,18 @@
     word-break: break-word;
     text-align: center;
     margin: 0.5rem 0 0.5rem 0;
+    flex: 1 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .score-description {
-    font-size: 0.875rem;
     color: #6b7280;
+    font-size: 1rem;
+    margin-top: auto;
+    margin-bottom: 0;
+    text-align: center;
 }
 
 .explanations {
